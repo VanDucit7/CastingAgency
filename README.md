@@ -10,13 +10,16 @@ Display Actors with attributes name, age and gender
 
 ## API Reference
 
+Web:
+https://castingagency-umt1.onrender.com
+
 ### Getting Started
 - Base URL: At present this app can only be run locally and is not hosted as a base URL.
-- The backend app is hosted at the default, `http://127.0.0.1:5000/`, which is set as a proxy in the frontend configuration. 
+- The backend app is hosted at the default, `https://castingagency-umt1.onrender.com`, which is set as a proxy in the frontend configuration. 
 - Authentication: This version of the application require authentication by Auth0.
 
 ### LOGIN 
-- accept to url http://127.0.0.1:5000/login-results
+- accept to url https://castingagency-umt1.onrender.com/login-results
 - Account: 
   - Email: castingassistant@gmail.com 
   - Pass: Abc@12345
@@ -67,7 +70,7 @@ The API will return three error types when requests fail:
       - pageSize: number of item in one page. default 10
     - Returns: array actor, page number, page size, total actor in database, total Pages
     - Results are paginated in groups of pageSize. Include a request argument to choose page number, starting from 1.
-- Sample: `curl http://127.0.0.1:5000/api/v1.0/actors?page=1&pageSize=10`
+- Sample: `curl https://castingagency-umt1.onrender.com/api/v1.0/actors?page=1&pageSize=10`
 
 ```
   {
@@ -101,7 +104,7 @@ The API will return three error types when requests fail:
     - Returns: 
       - item: actor with id, name, age, gender and movies that the actor action
       - success: true or false 
-- Sample: `curl http://127.0.0.1:5000/api/v1.0/actors/6`
+- Sample: `curl https://castingagency-umt1.onrender.com/api/v1.0/actors/6`
 
 ```
   {
@@ -160,7 +163,7 @@ The API will return three error types when requests fail:
 - General:
     - Deletes the actors of the given ID if it exists. 
     - Returns success value
-- Sample: `curl -X DELETE http://127.0.0.1:5000/api/v1.0/actors/8`
+- Sample: `curl -X DELETE https://castingagency-umt1.onrender.com/api/v1.0/actors/8`
 ```
 {
     "item": {
@@ -184,7 +187,7 @@ The API will return three error types when requests fail:
 - General:
     - Edit the actors of the given ID if it exists.
     - Returns success value.
-- Sample: `curl -X PATCH http://127.0.0.1:5000/api/v1.0/actors/9`
+- Sample: `curl -X PATCH https://castingagency-umt1.onrender.com/api/v1.0/actors/9`
 ```
 -H "Content-Type: application/json" -d 
 {
@@ -226,7 +229,7 @@ The API will return three error types when requests fail:
       - pageSize: number of item in one page. default 10
     - Returns: array movie, page number, page size, total movie in database, total Pages
     - Results are paginated in groups of pageSize. Include a request argument to choose page number, starting from 1.
-- Sample: `curl http://127.0.0.1:5000/api/v1.0/movies?page=1&pageSize=20`
+- Sample: `curl https://castingagency-umt1.onrender.com/api/v1.0/movies?page=1&pageSize=20`
 
 ```
   {
@@ -266,7 +269,7 @@ The API will return three error types when requests fail:
     - Returns: 
       - item: movie with id, title, release date and actor
       - success: true or false 
-- Sample: `curl http://127.0.0.1:5000/api/v1.0/movies/2`
+- Sample: `curl https://castingagency-umt1.onrender.com/api/v1.0/movies/2`
 
 ```
   {
@@ -303,7 +306,7 @@ The API will return three error types when requests fail:
 - General:
     - Creates a new movie.
     - Returns success value.
-- Sample: `curl -X POST http://127.0.0.1:5000/api/v1.0/movies`
+- Sample: `curl -X POST https://castingagency-umt1.onrender.com/api/v1.0/movies`
 ```
 -H "Content-Type: application/json" -d 
 {
@@ -336,7 +339,7 @@ The API will return three error types when requests fail:
 - General:
     - Deletes the movies of the given ID if it exists. 
     - Returns success value
-- Sample: `curl -X DELETE http://127.0.0.1:5000/api/v1.0/movies/4`
+- Sample: `curl -X DELETE https://castingagency-umt1.onrender.com/api/v1.0/movies/4`
 ```
 {
     "item": {
@@ -360,7 +363,7 @@ The API will return three error types when requests fail:
 - General:
     - Edit the movies of the given ID if it exists.
     - Returns success value.
-- Sample: `curl -X PATCH http://127.0.0.1:5000/api/v1.0/movies/9`
+- Sample: `curl -X PATCH https://castingagency-umt1.onrender.com/api/v1.0/movies/9`
 ```
 -H "Content-Type: application/json" -d 
 {
