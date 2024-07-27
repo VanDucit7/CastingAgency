@@ -3,7 +3,7 @@
 # ----------------------------------------------------------------------------#
 
 from flask import Flask, jsonify, request, abort, redirect
-from models import setup_db, Actor, Movie, db
+from models import setup_db, History, Book, db
 from flask_cors import CORS
 from auth import requires_auth, AuthError, URL_LOGIN
 from urllib.parse import urlparse, parse_qs
