@@ -101,4 +101,46 @@ class History(db.Model):
     fromPage = db.Column(db.Integer)
     toPage = db.Column(db.Integer)
     tag = db.Column(db.String)
-    createDate = db.Column(db.DateTime, nullable=False, default
+    createDate = db.Column(db.DateTime, nullable=False, default=datetime.now)
+
+    def __init__(self, content, fromPage, toPage, tag, createDate):
+        self.content = content
+        self.fromPage = fromPage
+        self.toPage = toPage
+        self.tag = tag
+        self.createDate = createDate
+
+    def insert(self):
+        db.session.add(self)
+        db.session.commit()
+
+    def update(self):
+        db.session.commit()
+
+    def delete(self):
+        db.session.delete(self)
+        db.session.commit()
+
+    def format(self):
+        books = [book.format_no_history() for book in self.books]
+        return {
+            'id': self.id,
+            'content': self.content,
+            'fromPage': self.fromPage,
+            'toPage': self.toPage,
+            'tag': self.tag,
+            'createDate': self.createDate,
+            'books': books
+        }
+
+    def format_no_book(self):
+        return {
+            'id': self.id,
+            'content': self.content,
+            'fromPage': self.fromPage,
+            'toPage': self.toPage,
+            'tag': self.tag,
+            'createDate': self.createDate
+        }
+
+
