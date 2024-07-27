@@ -97,17 +97,17 @@ def create_app(test_config=None):
             "token_type": token_type
         })
 
-    @app.route("/api/v1.0/actors")
-    @requires_auth('get:actors')
-    def get_all_actors(jwt):
-        selection = Actor.query.order_by(Actor.id).all()
+    @app.route("/api/v1.0/histories")
+    @requires_auth('get:histories')
+    def get_all_histories():
+        selection = History.query.order_by(History.id).all()
         result = paginate_item(request, selection)
         return result
 
-    @app.route("/api/v1.0/actors/<int:actor_id>")
-    @requires_auth('get:actors')
-    def get_actor(jwt, actor_id):
-        item = Actor.query.filter(Actor.id == actor_id).one_or_none()
+    @app.route("/api/v1.0/histories/<int:history_id>")
+    @requires_auth('get:histories')
+    def get_history(history_id):
+        item = History.query.filter(History.id == history_id).one_or_none()
         if item is None:
             abort(404)
         else:
@@ -118,23 +118,25 @@ def create_app(test_config=None):
                 }
             )
 
-    @app.route("/api/v1.0/actors", methods=["POST"])
-    @requires_auth('post:actors')
-    def create_actors(jwt):
+    @app.route("/api/v1.0/histories", methods=["POST"])
+    @requires_auth('post:histories')
+    def create_histories():
         body = request.get_json()
 
-        new_name = body.get("name", None)
-        new_age = body.get("age", None)
-        new_gender = body.get("gender", None)
-        movie_ids = body.get("movie_ids", None)
+        new_content = body.get("content", None)
+        new_fromPage = body.get("fromPage", None)
+        new_toPage = body.get("toPage", None)
+        new_tag = body.get("tag", None)
+        new_createDate = body.get("createDate", None)
+        new_book_ids = body.get("book_ids", None)
 
-        item = Actor(name=new_name, age=new_age, gender=new_gender)
+        item = History(content= new_content, fromPage=new_fromPage, toPage=new_toPage, tag=new_tag, createDate=new_createDate)
 
-        if not movie_ids is None:
-            for movie_id in movie_ids:
-                movie = Movie.query.get(movie_id)
-                if not movie is None:
-                    item.movies.append(movie)
+        if not new_book_ids is None:
+            for book_id in new_book_ids:
+                book = Book.query.get(book_id)
+                if not book is None:
+                    item.books.append(book)
                 else:
                     abort(404)
 
@@ -147,10 +149,10 @@ def create_app(test_config=None):
             }
         )
 
-    @app.route("/api/v1.0/actors/<int:actor_id>", methods=["DELETE"])
-    @requires_auth('delete:actors')
-    def delete_actor(jwt, actor_id):
-        item = Actor.query.filter(Actor.id == actor_id).one_or_none()
+    @app.route("/api/v1.0/histories/<int:history_id>", methods=["DELETE"])
+    @requires_auth('delete:histories')
+    def delete_history(history_id):
+        item = History.query.filter(History.id == history_id).one_or_none()
         if item is None:
             abort(404)
         item.delete()
@@ -162,26 +164,30 @@ def create_app(test_config=None):
             }
         )
 
-    @app.route("/api/v1.0/actors/<int:actor_id>", methods=["PATCH"])
-    @requires_auth('patch:actors')
-    def edit_actor(jwt, actor_id):
+    @app.route("/api/v1.0/histories/<int:history_id>", methods=["PATCH"])
+    @requires_auth('patch:histories')
+    def edit_history( history_id):
         body = request.get_json()
 
-        new_name = body.get("name", None)
-        new_age = body.get("age", None)
-        new_gender = body.get("gender", None)
-        movie_ids = body.get("movie_ids", None)
+        new_content = body.get("content", None)
+        new_fromPage = body.get("fromPage", None)
+        new_toPage = body.get("toPage", None)
+        new_tag = body.get("tag", None)
+        new_createDate = body.get("createDate", None)
+        new_book_ids = body.get("book_ids", None)
 
         try:
-            item = Actor.query.get(actor_id)
-            item.name = new_name
-            item.age = new_age
-            item.gender = new_gender
-            if not movie_ids is None:
-                item.movies.clear()
-                for movie_id in movie_ids:
-                    movie = Movie.query.get(movie_id)
-                    item.movies.append(movie)
+            item = History.query.get(history_id)
+            item.content = new_content
+            item.fromPage = new_fromPage
+            item.toPage = new_toPage
+            item.tag = new_tag
+            item.createDate = new_createDate
+            if not new_book_ids is None:
+                item.books.clear()
+                for book_id in new_book_ids:
+                    book = Book.query.get(book_id)
+                    item.books.append(book)
             db.session.commit()
             return jsonify(
                 {
@@ -193,17 +199,17 @@ def create_app(test_config=None):
         except:
             abort(422)
 
-    @app.route("/api/v1.0/movies")
-    @requires_auth('get:movies')
-    def get_all_movies(jwt):
-        selection = Movie.query.order_by(Movie.id).all()
+    @app.route("/api/v1.0/books")
+    @requires_auth('get:books')
+    def get_all_books():
+        selection = Book.query.order_by(Book.id).all()
         result = paginate_item(request, selection)
         return result
 
-    @app.route("/api/v1.0/movies/<int:movie_id>")
-    @requires_auth('get:movies')
-    def get_movie(jwt, movie_id):
-        item = Movie.query.filter(Movie.id == movie_id).one_or_none()
+    @app.route("/api/v1.0/books/<int:book_id>")
+    @requires_auth('get:books')
+    def get_book(book_id):
+        item = Book.query.filter(Book.id == book_id).one_or_none()
         if item is None:
             abort(404)
         else:
@@ -214,38 +220,41 @@ def create_app(test_config=None):
                 }
             )
 
-    @app.route("/api/v1.0/movies", methods=["POST"])
-    @requires_auth('post:movies')
-    def create_movies(jwt):
+    @app.route("/api/v1.0/books", methods=["POST"])
+    @requires_auth('post:books')
+    def create_books():
         body = request.get_json()
 
-        new_title = body.get("title", None)
-        new_release_date = body.get("release_date", None)
-        actor_ids = body.get("actor_ids", None)
-        movie = Movie(title=new_title, release_date=new_release_date)
+        new_name = body.get("name", None)
+        new_author = body.get("author", None)
+        new_numberOfPages = body.get("numberOfPages", None)
+        new_photo = body.get("photo", None)
+        new_createDate = body.get("createDate", None)
+        new_history_ids = body.get("history_ids", None)
+        book = Book(name=new_name, author=new_author, numberOfPages=new_numberOfPages, photo=new_photo, createDate=new_createDate)
 
-        if not actor_ids is None:
-            for actor_id in actor_ids:
-                actor = Actor.query.get(actor_id)
-                if actor is None:
+        if not new_history_ids is None:
+            for history_id in new_history_ids:
+                history = History.query.get(history_id)
+                if history is None:
                     abort(404)
                 else:
-                    movie.actors.append(actor)
+                    book.histories.append(history)
 
-        db.session.add(movie)
+        db.session.add(book)
         db.session.commit()
 
         return jsonify(
             {
-                "item": movie.format(),
+                "item": book.format(),
                 "success": True,
             }
         )
 
-    @app.route("/api/v1.0/movies/<int:movie_id>", methods=["DELETE"])
-    @requires_auth('delete:movies')
-    def delete_movie(jwt, movie_id):
-        item = Movie.query.filter(Movie.id == movie_id).one_or_none()
+    @app.route("/api/v1.0/books/<int:book_id>", methods=["DELETE"])
+    @requires_auth('delete:books')
+    def delete_book(book_id):
+        item = Book.query.filter(Book.id == book_id).one_or_none()
         if item is None:
             abort(404)
         item.delete()
@@ -257,24 +266,31 @@ def create_app(test_config=None):
             }
         )
 
-    @app.route("/api/v1.0/movies/<int:movie_id>", methods=["PATCH"])
-    @requires_auth('patch:movies')
-    def edit_movie(jwt, movie_id):
+    @app.route("/api/v1.0/books/<int:book_id>", methods=["PATCH"])
+    @requires_auth('patch:books')
+    def edit_book(book_id):
         body = request.get_json()
 
-        new_title = body.get("title", None)
-        new_release_date = body.get("release_date", None)
-        actor_ids = body.get("actor_ids", None)
+        new_name = body.get("name", None)
+        new_author = body.get("author", None)
+        new_numberOfPages = body.get("numberOfPages", None)
+        new_photo = body.get("photo", None)
+        new_createDate = body.get("createDate", None)
+        new_history_ids = body.get("history_ids", None)
+
         try:
-            item = Movie.query.get(movie_id)
-            item.title = new_title
-            item.release_date = new_release_date
-            if not actor_ids is None:
-                item.actors.clear()
-                for actor_id in actor_ids:
-                    actor = Actor.query.get(actor_id)
-                    if not actor is None:
-                        item.actors.append(actor)
+            item = Book.query.get(book_id)
+            item.name = new_name
+            item.author = new_author
+            item.numberOfPages = new_numberOfPages
+            item.photo = new_photo
+            item.createDate = new_createDate
+            if not new_history_ids is None:
+                item.histories.clear()
+                for history_id in new_history_ids:
+                    history = History.query.get(history_id)
+                    if not history is None:
+                        item.histories.append(history)
             item.update()
             return jsonify(
                 {
