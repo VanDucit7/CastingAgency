@@ -5,8 +5,10 @@
 from flask import Flask, jsonify, request, abort, redirect
 from models import setup_db, History, Book, db
 from flask_cors import CORS
-from auth import requires_auth, AuthError, URL_LOGIN
+from auth import requires_auth, AuthError, URL_LOGIN, AUTH0_DOMAIN, CLIENT_ID, AUTH0_CLIENT_SECRET, API_AUDIENCE
 from urllib.parse import urlparse, parse_qs
+from auth0.v3.authentication import GetToken
+from auth0.v3.exceptions import Auth0Error
 
 PAGE_SIZE_DEFAULT = 10
 
@@ -96,6 +98,28 @@ def create_app(test_config=None):
             "expires_in": expires_in,
             "token_type": token_type
         })
+
+    @app.route('/auth/login', methods=['POST'])
+    def login():
+        data = request.get_json()
+        email = data.get('email')
+        password = data.get('password')
+
+        if not email or not password:
+            return jsonify({"error": "Email and password are required"}), 400
+
+        get_token = GetToken(AUTH0_DOMAIN)
+        try:
+            token = get_token.login(client_id=CLIENT_ID,
+                                    client_secret=AUTH0_CLIENT_SECRET,
+                                    username=email,
+                                    password=password,
+                                    realm='Username-Password-Authentication',
+                                    audience=API_AUDIENCE,
+                                    scope='openid profile email')
+            return jsonify({"token": token['id_token']})
+        except Auth0Error as e:
+            return jsonify({"error": str(e)}), 401
 
     @app.route("/api/v1.0/histories")
     @requires_auth('get:histories')
