@@ -8,6 +8,7 @@ AUTH0_DOMAIN = 'dev-vermoric.jp.auth0.com'
 ALGORITHMS = ['RS256']
 API_AUDIENCE = 'CastingAgency'
 CLIENT_ID = "lJSszaH25M3Mv2QZqbniO8pYPnxeSVMO"
+AUTH0_CLIENT_SECRET = "j6G_Ob3rEpHxO2bYMRoCBv2gciBdB1-CQTObUn_uIYAhs6_BGjS_sRk3iPb_DRTG"
 # REDIRECT_URI = "http://127.0.0.1:5000/login-results"
 REDIRECT_URI = "https://castingagency-umt1.onrender.com/login-results"
 
